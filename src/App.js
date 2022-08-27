@@ -1,24 +1,38 @@
 import logo from './logo.svg';
 import './App.css';
+import { Container } from 'reactstrap';
+import { useEffect, useState } from 'react';
+import { fetchData } from './utils/api';
+import Listado from './Components/Listado';
+import axios from 'axios';
 
-function App() {
+const App = () => {
+
+  const [loading, setLoading] = useState(false);
+  const [personaje, setPersonaje] = useState([]);
+  
+
+
+
+  useEffect(() => {    
+    const cargarPersonajes = async () => {
+
+      setLoading(true);
+
+      const resp = await axios.get('https://swapi.dev/api/people/');
+      setPersonaje(resp.data.results);
+      
+      setLoading(false);
+    }
+    cargarPersonajes();
+  }, [])
+
+  
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>      
+      <Listado personaje={personaje}></Listado>
+    </Container>
   );
 }
 
